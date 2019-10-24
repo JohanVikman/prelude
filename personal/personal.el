@@ -28,24 +28,3 @@
       nil ;; Moving within emacs
     (shell-command tmux-cmd)) ;; At edges, send command to tmux
   )
-
-(global-set-key (kbd "M-P")
-                '(lambda ()
-                   (interactive)
-                   (windmove-emacs-or-tmux "up" "tmux select-pane -U")))
-(global-set-key (kbd "M-N")
-                '(lambda ()
-                   (interactive)
-                   (windmove-emacs-or-tmux "down" "tmux select-pane -D")))
-(global-set-key (kbd "M-F")
-                '(lambda ()
-                   (interactive)
-                   (windmove-emacs-or-tmux "right" "tmux select-pane -R")))
-(global-set-key (kbd "M-B")
-                '(lambda ()
-                   (interactive)
-                   (windmove-emacs-or-tmux "left"  "tmux select-pane -L")))
-
-
-;; Notera hur ovanstående keybindings matchar "send-keys" i tmux.
-;; Jag har "stulit
