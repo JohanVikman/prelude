@@ -28,3 +28,9 @@
       nil ;; Moving within emacs
     (shell-command tmux-cmd)) ;; At edges, send command to tmux
   )
+
+
+;; Ace-window and other-window configurations
+(smartrep-define-key global-map "C-x"
+  '(("o" . other-window)
+    ("O" . (lambda () (other-window -1)))))
