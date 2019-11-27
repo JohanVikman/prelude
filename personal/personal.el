@@ -55,4 +55,8 @@
           (tab-mark 9 [9655 9] [92 9]) ; tab
           )))
 
+
+;; Prelude uses 'ace-window' for the other-window functionality
+;; which is annoying. This setting reverts to "default" emacs
+;; other-window behavior.
 (global-set-key [remap other-window] 'other-window)
