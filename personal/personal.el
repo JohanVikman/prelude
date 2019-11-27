@@ -8,6 +8,8 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
+;; (setq package-check-signature nil)
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (package-initialize)
 
 ;; W is set by the env.sh sourced that should be sourced when we enter a confd branch directory
@@ -34,3 +36,23 @@
 (smartrep-define-key global-map "C-x"
   '(("o" . other-window)
     ("O" . (lambda () (other-window -1)))))
+
+
+;; org-journal configuration
+(setq org-journal-dir "~/org/journal")
+
+(progn
+  ;; Make whitespace-mode with very basic background coloring for whitespaces.
+  ;; http://ergoemacs.org/emacs/whitespace-mode.html
+  (setq whitespace-style (quote (face spaces tabs newline space-mark tab-mark newline-mark )))
+
+  ;; Make whitespace-mode and whitespace-newline-mode use “¶” for end of line char and “▷” for tab.
+  (setq whitespace-display-mappings
+        ;; all numbers are unicode codepoint in decimal. e.g. (insert-char 182 1)
+        '(
+          (space-mark 32 [183] [46]) ; SPACE 32 「 」, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
+          (newline-mark 10 [182 10]) ; LINE FEED,
+          (tab-mark 9 [9655 9] [92 9]) ; tab
+          )))
+
+(global-set-key [remap other-window] 'other-window)
