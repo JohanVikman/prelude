@@ -167,7 +167,7 @@ Position the cursor at its beginning, according to the current mode."
 
 
 ;; Enable LSP Origami Mode (for folding ranges)
-(package-require 'lsp-origami)
+(require 'lsp-origami)
 (add-hook 'origami-mode-hook #'lsp-origami-mode)
 (add-hook 'erlang-mode-hook #'origami-mode)
 
@@ -177,7 +177,7 @@ Position the cursor at its beginning, according to the current mode."
 ;;(package-install 'helm-lsp)
 
 ;; Which-key integration
-(package-require 'which-key)
+(require 'which-key)
 (add-hook 'erlang-mode-hook 'which-key-mode)
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
