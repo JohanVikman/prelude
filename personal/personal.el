@@ -156,6 +156,8 @@
                   " *{"))))
 
 
+(setq tab-width 4)
+
 (defun er-smart-open-line ()
   "Insert an empty line after the current line.
 Position the cursor at its beginning, according to the current mode."
@@ -196,3 +198,9 @@ Position the cursor at its beginning, according to the current mode."
 (setq prelude-flyspell nil)
 (global-company-mode 0)
 (setq prelude-format-on-save nil)
+
+;; Disable flycheck for some types.
+(with-eval-after-load 'flycheck
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+(setq-default flycheck-disabled-checkers '(c/c++-clang))
+(setq-default flycheck-disabled-checkers '(erlang))
