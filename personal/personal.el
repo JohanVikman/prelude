@@ -13,15 +13,19 @@
 (package-initialize)
 
 ;; W is set by the env.sh sourced that should be sourced when we enter a confd branch directory
-(when (getenv "W")
-  (load-file (substitute-in-file-name "$W/devel_support/lib/emacs/tail-f.el"))
-)
+;; Don't use  tail-f.el, use lux-mode.el and yang-mode from melpa.
+;; (when (getenv "W")
+;;   (load-file (substitute-in-file-name "$W/devel_support/lib/emacs/tail-f.el"))
+;; )
+
+;; Never ever use TAB character in code
+(setq-default indent-tabs-mode nil)
 
 ;; FCI Mode
 (require 'fill-column-indicator)
 (setq fci-rule-color "darkblue")
 (setq-default fci-rule-column 80)
-(add-hook 'erlang-mode-hook 'fci-mode)
+;;(add-hook 'erlang-mode-hook 'fci-mode)
 
 ;; Window move together with tmux
 (defun windmove-emacs-or-tmux(dir tmux-cmd)
@@ -204,3 +208,52 @@ Position the cursor at its beginning, according to the current mode."
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 (setq-default flycheck-disabled-checkers '(c/c++-clang))
 (setq-default flycheck-disabled-checkers '(erlang))
+
+
+;; lux-mode from github.com/hawk/lux
+(add-to-list 'load-path "~/lib/lux/emacs")
+(load "lux-mode.el")
+
+;; Below from Hakan N.
+(when (getenv "W")
+ (use-package flycheck
+  :config
+  ;; Add yang flycheck
+  (setq exec-path (cons "$W/bin" exec-path))
+
+  (flycheck-define-checker yang
+    "A yang syntax checker using yanger."
+    :command ("yanger" source)
+    :error-patterns
+    ((error line-start (file-name) ":" line ":" column ": " (message) line-end)
+     (error line-start (file-name) ":" line ": " (message) line-end))
+    :modes yang-mode
+    )
+  (flycheck-add-mode 'yang 'yang-mode)
+  (setq flycheck-checkers (cons 'yang flycheck-checkers))
+
+  
+  
+  ;; Add lux flycheck
+  (setq exec-path (cons "$W/system/test/bin" exec-path))
+  (setenv "TEST_DIR" "$W/system/test")
+  (flycheck-define-checker lux
+    "A lux syntax checker using lux --mode validate."
+    :command ("lux" "--mode" "validate" source-inplace)
+    :error-patterns
+    ((error line-start "\t" (file-name) ":" line ":" column " - " (message) line-end)
+     (error line-start "\t" (file-name) ":" line " - " (message) line-end)
+     )
+    :modes lux-mode
+    )
+  (flycheck-add-mode 'lux 'lux-mode)
+  (setq flycheck-checkers (cons 'lux flycheck-checkers))
+
+  ;; Enable flycheck globally
+  (global-flycheck-mode t)
+  :bind
+  ( ("C-c C-p" . flycheck-previous-error)
+    ("C-c C-n" . flycheck-next-error)
+    ("C-c C-e" . flycheck-first-error)
+    ))
+)
